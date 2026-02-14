@@ -1,27 +1,25 @@
-def validate_side(side: str):
-    side = side.upper()
-    if side not in ["BUY", "SELL"]:
-        raise ValueError("Side must be BUY or SELL")
-    return side
+import logging
 
+logger = logging.getLogger(__name__)
 
-def validate_order_type(order_type: str):
-    order_type = order_type.upper()
-    if order_type not in ["MARKET", "LIMIT"]:
-        raise ValueError("Order type must be MARKET or LIMIT")
-    return order_type
+def validate_order_input(args):
+    """
+    Validates CLI input arguments before placing order.
+    """
 
+    # Validate symbol
+    if not args.symbol or not isinstance(args.symbol, str):
+        raise ValueError("Invalid symbol provided.")
 
-def validate_quantity(quantity: float):
-    if quantity <= 0:
-        raise ValueError("Quantity must be positive")
-    return quantity
+    # Validate quantity
+    if args.quantity <= 0:
+        raise ValueError("Quantity must be greater than 0.")
 
+    # Validate order type specific rules
+    if args.type == "LIMIT":
+        if args.price is None:
+            raise ValueError("LIMIT order requires --price.")
+        if args.price <= 0:
+            raise ValueError("Price must be greater than 0.")
 
-def validate_price(price, order_type):
-    if order_type == "LIMIT":
-        if price is None:
-            raise ValueError("Price is required for LIMIT orders")
-        if price <= 0:
-            raise ValueError("Price must be positive")
-    return price
+    logger.info("Input validation successful.")

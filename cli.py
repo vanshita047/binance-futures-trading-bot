@@ -1,52 +1,59 @@
-# from dotenv import load_dotenv
-# import os
-
-# load_dotenv()
-
-# print("API KEY:", os.getenv("BINANCE_API_KEY"))
-
-# from bot.logging_config import setup_logger
-
-# logger = setup_logger()
-
-# logger.info("Trading bot started")
-# print("Logger test complete")
-
-import time
-from bot.client import BinanceFuturesClient
+import argparse
 import logging
+import sys
 
-SYMBOL = "BTCUSDT"
-INTERVAL = "1m"
+from bot.logging_config import setup_logging
+from bot.client import BinanceFuturesClient
+from bot.orders import place_market_order, place_limit_order
+from bot.validators import validate_order_input
+
+# Setup logging FIRST
+setup_logging()
+logger = logging.getLogger(__name__)
+logger.info("Bot started...")
+
 
 def main():
+    parser = argparse.ArgumentParser(description="Binance Futures Trading Bot")
 
-    logging.basicConfig(
-    filename="logs/bot.log",
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
-    )
-    client = BinanceFuturesClient()
-    logging.info("Bot started...")
+    parser.add_argument("--symbol", required=True, help="Trading pair (e.g., BTCUSDT)")
+    parser.add_argument("--side", required=True, choices=["BUY", "SELL"], help="Order side")
+    parser.add_argument("--type", required=True, choices=["MARKET", "LIMIT"], help="Order type")
+    parser.add_argument("--quantity", required=True, type=float, help="Order quantity")
+    parser.add_argument("--price", type=float, help="Price (required for LIMIT orders)")
 
-    while True:
-        try:
-            klines = client.get_klines(
-                symbol=SYMBOL,
-                interval=INTERVAL,
-                limit=10
+    args = parser.parse_args()
+
+    try:
+        # Validate input
+        validate_order_input(args)
+
+        # Initialize client
+        client = BinanceFuturesClient().client
+
+        if args.type == "MARKET":
+            place_market_order(
+                client=client,
+                symbol=args.symbol,
+                side=args.side,
+                quantity=args.quantity
             )
 
-            latest_candle = klines[-1]
-            close_price = latest_candle[4]
+        elif args.type == "LIMIT":
+            if not args.price:
+                raise ValueError("LIMIT order requires --price")
 
-            print(f"Latest Close Price: {close_price}")
+            place_limit_order(
+                client=client,
+                symbol=args.symbol,
+                side=args.side,
+                quantity=args.quantity,
+                price=args.price
+            )
 
-            time.sleep(60)
-
-        except Exception as e:
-            print("Error:", e)
-            time.sleep(10)
+    except Exception as e:
+        logger.error(f"Error occurred: {str(e)}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":

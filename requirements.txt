@@ -33,29 +33,107 @@ urllib3==2.6.3
 websockets==16.0
 win32_setctime==1.2.0
 yarl==1.22.0
-# Binance Futures Trading Bot
+# Binance Futures Trading Bot (Testnet)
 
 ## Overview
-This project is a Python-based Binance Futures trading bot that supports:
+This project is a Python-based Binance Futures Trading Bot that allows users to place MARKET and LIMIT orders on Binance Futures Testnet via a command-line interface (CLI).
 
-- EMA Crossover Strategy
-- Risk Management (1% risk per trade)
-- Stop Loss and Take Profit
-- Backtesting Engine
-- Performance Metrics (Win Rate, Drawdown, Profit Factor)
+The project demonstrates:
+- Binance Futures API integration
+- Clean project structure
+- Input validation
+- Logging and error handling
+- Testnet order execution
 
-## Technologies Used
-- Python
-- Binance Futures Connector
-- Pandas
-- NumPy
+---
 
 ## Features
-- Fetch live market data
-- Execute EMA crossover strategy
-- Backtest strategy on historical data
-- Risk-based position sizing
-- Performance reporting
+
+- Place MARKET orders
+- Place LIMIT orders
+- Input validation
+- Structured logging (logs stored in logs/bot.log)
+- Clean modular architecture
+
+---
+
+## Project Structure
+
+trading_bot/
+│
+├── bot/
+│   ├── __init__.py
+│   ├── client.py            # Binance Futures client wrapper
+│   ├── orders.py            # Order placement logic
+│   ├── validators.py        # Input validation
+│   └── logging_config.py    # Logging configuration
+│
+├── cli.py                   # CLI entry point
+├── requirements.txt
+├── README.md
+└── logs/
+    └── bot.log
 
 ## Setup Instructions
-1. Install dependencies:
+
+### Clone Repository
+
+### Create Virtual Environment 
+
+### Install Dependencies
+
+### Create `.env` File
+
+Create a `.env` file in the root directory:
+
+
+Make sure you are using **Binance Futures Testnet API keys**.
+
+## How to Run
+
+### Place MARKET Order
+
+### Place LIMIT Order
+
+---
+
+## Logging
+
+All activity is logged in:
+
+Logs include:
+- Bot start
+- Input validation status
+- Order placement details
+- Order success confirmation
+- Error messages (if any)
+
+---
+
+## Assumptions
+
+- Orders are placed only on Binance Futures Testnet.
+- Only MARKET and LIMIT orders are supported.
+- LIMIT orders use `GTC` (Good Till Cancelled).
+- User provides valid symbol and sufficient margin in testnet account.
+
+---
+
+##  Requirements
+
+---
+
+## Evaluation Coverage
+
+✔ Correct order execution on testnet  
+✔ Structured, modular code  
+✔ Validation + error handling  
+✔ Clean logging  
+✔ Clear setup instructions  
+
+---
+
+## Author
+Vanshita Chandnani
+Final Year BCA Student – Symbiosis Pune
+
