@@ -33,3 +33,29 @@ urllib3==2.6.3
 websockets==16.0
 win32_setctime==1.2.0
 yarl==1.22.0
+# Binance Futures Trading Bot
+
+## Overview
+This project is a Python-based Binance Futures trading bot that supports:
+
+- EMA Crossover Strategy
+- Risk Management (1% risk per trade)
+- Stop Loss and Take Profit
+- Backtesting Engine
+- Performance Metrics (Win Rate, Drawdown, Profit Factor)
+
+## Technologies Used
+- Python
+- Binance Futures Connector
+- Pandas
+- NumPy
+
+## Features
+- Fetch live market data
+- Execute EMA crossover strategy
+- Backtest strategy on historical data
+- Risk-based position sizing
+- Performance reporting
+
+## Setup Instructions
+1. Install dependencies:
